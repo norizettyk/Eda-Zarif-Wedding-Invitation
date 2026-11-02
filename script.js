@@ -680,8 +680,8 @@ document.addEventListener("keydown", function (event) {
     if (!musicEnabled) return;
 
     try {
-        if (music.currentTime < 8) {
-            music.currentTime = 8;
+        if (music.currentTime < 26) {
+            music.currentTime = 26;
         }
 
         await music.play();
