@@ -690,8 +690,8 @@ document.addEventListener("keydown", function (event) {
         }
 
         // Move playback to 8 seconds if starting from the beginning
-        if (music.currentTime < 8) {
-            music.currentTime = 8;
+        if (music.currentTime < 26) {
+            music.currentTime = 26;
         }
 
         await music.play();
