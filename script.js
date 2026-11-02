@@ -676,16 +676,20 @@ document.addEventListener("keydown", function (event) {
         }
     }
 
-    async function playMusic() {
-        if (!musicEnabled) return;
+  async function playMusic() {
+    if (!musicEnabled) return;
 
-        try {
-            await music.play();
-            updateMusicButton();
-        } catch (error) {
-            updateMusicButton();
+    try {
+        if (music.currentTime < 8) {
+            music.currentTime = 8;
         }
+
+        await music.play();
+        updateMusicButton();
+    } catch (error) {
+        updateMusicButton();
     }
+}
 
     // Attempt autoplay when the invitation opens
     playMusic();
