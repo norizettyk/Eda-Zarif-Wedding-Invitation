@@ -1979,4 +1979,30 @@ body.at-page-bottom .bottom-nav .button-group {
 .bottom-nav .button-group .cssbuttons-io + .cssbuttons-io {
     border-left: 1px solid rgba(255, 255, 255, 0.65) !important;
 }
+/* BACKGROUND MUSIC BUTTON */
+.music-toggle {
+    position: fixed;
+    right: 16px;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    width: 44px;
+    height: 44px;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 9999;
+
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.music-toggle:active {
+    transform: scale(0.92);
+}
