@@ -651,4 +651,78 @@ document.addEventListener("keydown", function (event) {
     }
 });
 
+// =====================================
+// BACKGROUND WEDDING MUSIC
+// =====================================
+
+(() => {
+    const music = document.getElementById("backgroundMusic");
+    const toggle = document.getElementById("musicToggle");
+    const icon = document.getElementById("musicIcon");
+
+    if (!music || !toggle || !icon) return;
+
+    let musicEnabled = true;
+
+    function updateMusicButton() {
+        if (music.paused) {
+            icon.textContent = "🔇";
+            toggle.setAttribute("aria-label", "Play background music");
+            toggle.setAttribute("aria-pressed", "false");
+        } else {
+            icon.textContent = "🔊";
+            toggle.setAttribute("aria-label", "Pause background music");
+            toggle.setAttribute("aria-pressed", "true");
+        }
+    }
+
+    async function playMusic() {
+        if (!musicEnabled) return;
+
+        try {
+            await music.play();
+            updateMusicButton();
+        } catch (error) {
+            updateMusicButton();
+        }
+    }
+
+    // Attempt autoplay when the invitation opens
+    playMusic();
+
+    // Start music after the visitor's first interaction if autoplay is blocked
+    function startAfterInteraction() {
+        if (musicEnabled && music.paused) {
+            playMusic();
+        }
+
+        if (!music.paused) {
+            document.removeEventListener("pointerdown", startAfterInteraction);
+            document.removeEventListener("click", startAfterInteraction);
+        }
+    }
+
+    document.addEventListener("pointerdown", startAfterInteraction);
+    document.addEventListener("click", startAfterInteraction);
+
+    // Speaker button toggles music
+    toggle.addEventListener("click", async (event) => {
+        event.stopPropagation();
+
+        if (music.paused) {
+            musicEnabled = true;
+            await playMusic();
+        } else {
+            musicEnabled = false;
+            music.pause();
+            updateMusicButton();
+        }
+    });
+
+    music.addEventListener("play", updateMusicButton);
+    music.addEventListener("pause", updateMusicButton);
+
+    updateMusicButton();
+})();
+
 
