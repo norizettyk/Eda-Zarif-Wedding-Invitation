@@ -474,6 +474,7 @@ async function loadPublicWishes() {
 
 loadPublicWishes();
 
+
 /* =========================================================
    RSVP SUBMIT TO SUPABASE
 ========================================================= */
@@ -486,25 +487,33 @@ if (submitBtn) {
         const attendeesInput = document.getElementById("attendeesInput");
         const wishBox = document.getElementById("wishBox");
         const status = document.getElementById("rsvpStatus");
+
         const name = nameInput.value.trim();
         const attendees = Number.parseInt(attendeesInput.value, 10);
         const wish = wishBox.value.trim();
         const attendance = document.querySelector('input[name="attend"]:checked');
 
+        // Validate name
         if (!name) {
             status.textContent = "Please enter your name.";
             nameInput.focus();
             return;
         }
+
+        // Validate attendance
         if (!attendance) {
             status.textContent = "Please select your attendance.";
             return;
         }
+
+        // Validate number of guests
         if (!Number.isInteger(attendees) || attendees < 1 || attendees > 20) {
             status.textContent = "Please enter between 1 and 20 guests.";
             attendeesInput.focus();
             return;
         }
+
+        // Validate wish
         if (wish.length > 500) {
             status.textContent = "Please keep your wish under 500 characters.";
             wishBox.focus();
@@ -514,28 +523,46 @@ if (submitBtn) {
         submitBtn.disabled = true;
         status.textContent = "Sending your RSVP with love...";
 
-        const { error } = await supabaseClient.rpc("submit_wedding_rsvp", {
-            p_name: name,
-            p_attendance: attendance.value,
-            p_attendees: attendees,
-            p_wish: wish
-        });
+        try {
+            const { error } = await supabaseClient.rpc(
+                "submit_wedding_rsvp",
+                {
+                    p_name: name,
+                    p_attendance: attendance.value,
+                    p_attendees: attendees,
+                    p_wish: wish
+                }
+            );
 
-        submitBtn.disabled = false;
+            if (error) {
+                throw error;
+            }
 
-        if (error) {
+            // RSVP successfully saved
+            status.textContent = "Thank you! Your RSVP has been received. 💕";
+
+            // Clear the form
+            nameInput.value = "";
+            attendeesInput.value = "1";
+            wishBox.value = "";
+            wishBox.style.height = "auto";
+
+            document.querySelectorAll('input[name="attend"]').forEach(radio => {
+                radio.checked = false;
+            });
+
+            // Refresh public wishes
+            await loadPublicWishes();
+
+            // CLOSE RSVP POPUP AFTER SUCCESSFUL SUBMISSION
+            closePopup();
+
+        } catch (error) {
             console.error("RSVP submission failed:", error);
             status.textContent = "Sorry, we couldn't save your RSVP. Please try again.";
-            return;
+        } finally {
+            submitBtn.disabled = false;
         }
-
-        status.textContent = "Thank you! Your RSVP has been received. 💕";
-        nameInput.value = "";
-        attendeesInput.value = "1";
-        wishBox.value = "";
-        wishBox.style.height = "auto";
-        document.querySelectorAll('input[name="attend"]').forEach(radio => { radio.checked = false; });
-        await loadPublicWishes();
     });
 }
 
