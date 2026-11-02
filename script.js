@@ -680,13 +680,25 @@ document.addEventListener("keydown", function (event) {
     if (!musicEnabled) return;
 
     try {
-        if (music.currentTime < 26) {
-            music.currentTime = 26;
+        // Wait until the MP3 metadata is available
+        if (music.readyState === 0) {
+            await new Promise((resolve, reject) => {
+                music.addEventListener("loadedmetadata", resolve, { once: true });
+                music.addEventListener("error", reject, { once: true });
+                music.load();
+            });
+        }
+
+        // Move playback to 8 seconds if starting from the beginning
+        if (music.currentTime < 8) {
+            music.currentTime = 8;
         }
 
         await music.play();
         updateMusicButton();
+
     } catch (error) {
+        console.log("Music playback error:", error);
         updateMusicButton();
     }
 }
