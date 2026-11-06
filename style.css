@@ -463,12 +463,14 @@ body {
     z-index: 5;
     opacity: 1;
     transform: translateX(-7%);
+   object-fit: cover;
 }
 
 .curtain-right {
     z-index: 5;
     opacity: 1;
     transform: translateX(7%);
+   object-fit: cover;
 }
 
 .wardrobe-close {
