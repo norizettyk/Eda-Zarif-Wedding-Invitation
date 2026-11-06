@@ -424,26 +424,100 @@ body {
 
 
 /* =====================================================
-   FRAME 5 - DRESS CODE
+   FRAME 5 - DRESS CODE ANIMATION
 ===================================================== */
 
 .dresscode-frame {
-    background-image: url("images/dresscode BG CLOSE.png");
+    position: relative;
+
+    background-image: url("images/dresscodeBG.png");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 
     cursor: pointer;
-
-    transition: background-image 0.3s ease;
+    isolation: isolate;
 }
 
-/* OPEN DRESS CODE */
+/* All animation images */
+.dresscode-layer {
+    position: absolute;
 
-.dresscode-frame.open {
-    background-image: url("images/dresscode BG OPEN 2.png");
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    pointer-events: none;
+
+    transition:
+        transform 1s ease,
+        opacity 0.8s ease;
 }
 
+/* Layer order */
+.curtain-left {
+    z-index: 5;
+    opacity: 1;
+    transform: translateX(-7%);
+}
+
+.curtain-right {
+    z-index: 5;
+    opacity: 1;
+    transform: translateX(7%);
+}
+
+.wardrobe-close {
+    z-index: 3;
+    opacity: 1;
+}
+
+.wardrobe-open {
+    z-index: 6;
+    opacity: 0;
+}
+
+.dresscode-info {
+    z-index: 7;
+    opacity: 0;
+    transform: scale(0.75);
+}
+
+/* =====================================
+   ANIMATION STARTS AFTER FIRST TAP
+===================================== */
+
+/* Curtains move apart */
+.dresscode-frame.animate .curtain-left {
+    transform: translateX(-28%);
+}
+
+.dresscode-frame.animate .curtain-right {
+    transform: translateX(28%);
+}
+
+/* Wardrobe changes after curtains */
+.dresscode-frame.animate .wardrobe-close {
+    opacity: 0;
+    transition-delay: 1s;
+}
+
+.dresscode-frame.animate .wardrobe-open {
+    opacity: 1;
+    transition-delay: 1s;
+}
+
+/* Dress code appears after wardrobe opens */
+.dresscode-frame.animate .dresscode-info {
+    opacity: 1;
+    transform: scale(1);
+
+    transition-delay: 1.5s;
+}
 
 
 
