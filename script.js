@@ -121,29 +121,54 @@ invitationImages.forEach((image) => {
 
 
 /* =====================================================
-   DRESS CODE - OPEN / CLOSE
+   FRAME 5 - DRESS CODE ANIMATION
 ===================================================== */
 
-const dresscodeFrame = document.getElementById("dresscodeFrame");
+const dresscodeFrame =
+    document.getElementById("dresscodeFrame");
 
 if (dresscodeFrame) {
 
-    function toggleDresscode() {
-        dresscodeFrame.classList.toggle("open");
+    let dresscodeAnimationPlayed = false;
+
+    function playDresscodeAnimation() {
+
+        // Only play once
+        if (dresscodeAnimationPlayed) return;
+
+        dresscodeAnimationPlayed = true;
+
+        // Start the complete animation
+        dresscodeFrame.classList.add("animate");
+
     }
 
-    // Open or close when tapped
-    dresscodeFrame.addEventListener("click", toggleDresscode);
+    // Tap anywhere inside Frame 5
+    dresscodeFrame.addEventListener(
+        "click",
+        playDresscodeAnimation
+    );
 
-    // Also support keyboard interaction
-    dresscodeFrame.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            toggleDresscode();
+    // Keyboard accessibility
+    dresscodeFrame.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Enter" ||
+                event.key === " "
+            ) {
+
+                event.preventDefault();
+                playDresscodeAnimation();
+
+            }
+
         }
-    });
+    );
 
 }
+
 
 
 /* =========================================================
